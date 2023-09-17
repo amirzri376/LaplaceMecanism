@@ -1,5 +1,6 @@
 # LaplaceMecanism
-C++ code example for computing the secure multi-party Laplace mechanism. This implementation is based on the paper titled "Secure multiparty computation of the Laplace mechanism."
+C++ code example for computing the secure multi-party Laplace mechanism. This implementation is based on the paper 
+> Secure multiparty computation of the Laplace mechanism
 
 **Execution Instructions**:
 1. Download the benchmark from the paper titled "Differentially private data aggregation with optimal utility" by Eigner, F., Kate, A., Maffei, M., Pampaloni, F., and Pryvalov, I. (ACSAC 2014). This benchmark assesses the performance of differentially private MPC protocols operating with floating-point arithmetic.
