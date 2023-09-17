@@ -15,4 +15,3 @@ To install the benchmark, download and integrate the following libraries:
 2. Boost library
 3. Pugixml library
 4. Relic library, available at [https://projects.cispa.saarland/pryvalov/relicwrapper](https://projects.cispa.saarland/pryvalov/relicwrapper)
-
