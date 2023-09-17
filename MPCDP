@@ -1,0 +1,65 @@
+void Node::DLM_th1(long long uid, const std::string& name,
+		const std::string& partName, double lambda, int Gamma, int f, int L, int k){
+
+	string a1 = name+".r"+partName;
+	PRandInt(uid, a1, k); // line 1
+	string xFL = name +"."+partName+"FL|";
+	FP2FL(uid, xFL, a1, Gamma, f, L, k); // line 2 or 3
+	string lnxFL = name+".ln"+partName+"FL|";
+	FLLog2(uid, lnxFL, xFL, L, k); //line 4 or 5
+	double alpha =  1/(log(1-p) * log2(exp(1))); 	//line 6 or 7
+	{
+		stringstream sstr;
+		sstr << "[DL] alpha = " << alpha << endl;
+		out_ << sstr.str();
+	}
+	vector<long long> aLL = double2FL(alpha, L, k);
+	string alphaFL = name + "."+partName+"|alphaFL|";
+	SetScalar(alphaFL+"v", aLL[0]);
+	SetScalar(alphaFL+"p", aLL[1]);
+	SetScalar(alphaFL+"z", aLL[2]);
+	SetScalar(alphaFL+"s", aLL[3]); //TODO refactoring
+	string alnxFL = name +".aln"+partName+"|";
+	FLMul(uid, alnxFL, alphaFL, lnxFL, L); // line 6 and 7
+	string i1 = name +".z"+partName+"|"; //zx or zy === i1 or i2
+	FLRound(uid, z1FL, alnxFL, 1, L, k); // line 8 or 9
+}
+void Node::DLM(long long uid, const std::string &name,
+		const std::string &D, int N, double lambda, int Gamma, double r, double r_modi,int f, int L, int k){
+	CheckUID(uid);
+	char ch = 'x';
+	vector<boost::thread*> threads;
+	vector<string*> vs;
+	for(int i=0; i<2; i++, ch++){
+		long long uid_new = GenUID(uid,i+1);
+		string* str_part = new string(boost::lexical_cast<string>(ch));
+		vs.push_back(str_part);
+		boost::thread* threadX = new boost::thread(boost::bind(&Node::DLM_th1, this,
+				uid_new, name, *str_part, lambda, Gamma, f, L, k));
+		threads.push_back(threadX);
+	}
+
+	string d_beta = name + ".d_beta.";
+	Copy(d_beta, D+"0");
+	for(int i=1; i<N; i++){
+		FLAdd(d_beta, d_beta, D+to<string>(i)); line 1,2,3 of Protcol 7
+	}
+
+	WaitForThreads_(threads);
+	Clear(vs);
+
+        string g = name + ".2|";
+	FLAdd(uid, fl2, d_beta, r_modi, L, k); // line 4 of Protcol 7
+        string gr = name + ".2|";
+	EFLRound(uid, gr, g, 0, L, k);// line 5 of Protcol 7
+	string i = name + ".1|";
+        string z1 = name + ".zx";
+	string z2 = name + ".zy";
+	FLSub(uid, i, z1, z2, L, k); // line 6 of Protocol 5
+        string ir = name + ".2|";
+        FLMul(uid, ir, i, r, L, k); // line 7 of Protcol 7
+	string out = name + ".2|";
+	FLAdd(uid, out, gr, ir, L, k); // line 8 of Protcol 7
+	SetScalar(name, Output(uid, out)); // line 9
+}
+
