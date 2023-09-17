@@ -2,12 +2,12 @@ void Node::DLM_th1(long long uid, const std::string& name,
 		const std::string& partName, double lambda, int Gamma, int f, int L, int k){
 
 	string a1 = name+".r"+partName;
-	PRandInt(uid, a1, k); // line 1
+	PRandInt(uid, a1, k); // line 1 of Protocol 3
 	string xFL = name +"."+partName+"FL|";
-	FP2FL(uid, xFL, a1, Gamma, f, L, k); // line 2 or 3
+	FP2FL(uid, xFL, a1, Gamma, f, L, k); // line 2 or 3 of Protocol 3
 	string lnxFL = name+".ln"+partName+"FL|";
-	FLLog2(uid, lnxFL, xFL, L, k); //line 4 or 5
-	double alpha =  1/(log(1-p) * log2(exp(1))); 	//line 6 or 7
+	FLLog2(uid, lnxFL, xFL, L, k); //line 4 or 5 of Protocol 3
+	double alpha =  1/(log(1-p) * log2(exp(1))); 	//
 	{
 		stringstream sstr;
 		sstr << "[DL] alpha = " << alpha << endl;
@@ -18,11 +18,11 @@ void Node::DLM_th1(long long uid, const std::string& name,
 	SetScalar(alphaFL+"v", aLL[0]);
 	SetScalar(alphaFL+"p", aLL[1]);
 	SetScalar(alphaFL+"z", aLL[2]);
-	SetScalar(alphaFL+"s", aLL[3]); //TODO refactoring
+	SetScalar(alphaFL+"s", aLL[3]); 
 	string alnxFL = name +".aln"+partName+"|";
-	FLMul(uid, alnxFL, alphaFL, lnxFL, L); // line 6 and 7
+	FLMul(uid, alnxFL, alphaFL, lnxFL, L); // line 6 or 7 of Protocol 3
 	string i1 = name +".z"+partName+"|"; //zx or zy === i1 or i2
-	FLRound(uid, z1FL, alnxFL, 1, L, k); // line 8 or 9
+	FLRound(uid, i1, r, 1, L, k); // line 8 or 9 line 6 or 7 of Protocol 3
 }
 void Node::DLM(long long uid, const std::string &name,
 		const std::string &D, int N, double lambda, int Gamma, double r, double r_modi,int f, int L, int k){
@@ -55,11 +55,11 @@ void Node::DLM(long long uid, const std::string &name,
 	string i = name + ".1|";
         string z1 = name + ".zx";
 	string z2 = name + ".zy";
-	FLSub(uid, i, z1, z2, L, k); // line 6 of Protocol 5
+	FLSub(uid, i, z1, z2, L, k); // line 10 of Protocol 3
         string ir = name + ".2|";
         FLMul(uid, ir, i, r, L, k); // line 7 of Protcol 7
 	string out = name + ".2|";
 	FLAdd(uid, out, gr, ir, L, k); // line 8 of Protcol 7
-	SetScalar(name, Output(uid, out)); // line 9
+	SetScalar(name, Output(uid, out)); // line 9 of Protcol 7
 }
 
