@@ -12,4 +12,4 @@ To set up the benchmark, download and install the following libraries:
 1. GMP library
 2. Boost library
 3. Pugixml library
-4. Relic library
+4. Relic library available at `https://projects.cispa.saarland/pryvalov/relicwrapper`
