@@ -1,5 +1,5 @@
 # LaplaceMechanism
-C++ code example for computing the secure multi-party Laplace mechanism. This implementation is inspired by the paper:
+C++ code example for computing the secure multi-party Laplace mechanism. This implementation is based by the paper:
 > Secure multiparty computation of the Laplace mechanism
 
 **Execution Instructions**:
